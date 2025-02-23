@@ -25,7 +25,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="h-screen w-64 bg-gray-900 text-white p-4 shadow-lg flex flex-col">
+    <div className="h-screen w-64 fixed bg-gray-900 text-white p-4 shadow-lg flex flex-col">
       <h2 className="text-xl font-bold text-center my-6">ShopEase</h2>
 
       <div className="space-y-4">

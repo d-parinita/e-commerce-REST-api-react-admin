@@ -3,5 +3,7 @@ export const routes = {
     HOME: '/',
     CATEGORY: '/category',
     PRODUCT: '/product',
-    ORDERS: '/orders'
+    ORDERS: '/orders',
+    CATEGORYFORMPAGE: '/categoryFormPage',
+    PRODUCTFORMPAGE: '/productFormPage'
 }

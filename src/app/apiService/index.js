@@ -28,7 +28,7 @@ ecommerceApi.interceptors.response.use(
     function (error) {
         if(error.response?.status === 401) {
             localStorage.clear();
-            window.location.href = "/signin"
+            // window.location.href = "/signin"
         }
         return Promise.reject(error)
     }
@@ -64,6 +64,46 @@ export const getCategories = async() => {
 export const getProducts = async(params) => {
     try {
         const data = await ecommerceApi.get(apiConstants.GETPRODUCT + `?` + params)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const getPresignUrl = async(payload) => {
+    try {
+        const data = await ecommerceApi.post(apiConstants.PRESIGNURL, payload)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const uploadImg = async(payload, url, contentType) => {
+    try {
+        const data = await axios.put(url, payload, {
+            headers: {
+                "Content-Type": contentType
+            }
+        })
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const addCategory = async(payload) => {
+    try {
+        const data = await ecommerceApi.post(apiConstants.ADDCATEGORIES, payload)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const deleteCategory = async(id) => {
+    try {
+        const data = await ecommerceApi.delete(apiConstants.DELETECATEGORIES + id)
         return data
     } catch (error) {
         throw error

@@ -32,8 +32,8 @@ export default function Layout({ children }) {
     <>
     <div className='flex'>
         <Sidebar/>
-        <div className='py-[20px] w-full min-h-screen'>
-        {children}
+        <div className='py-[20px] ml-[255px] w-full min-h-screen'>
+          {children}
         </div>
     </div> 
     </>

@@ -6,6 +6,8 @@ import { getProducts } from '../apiService';
 import { toast } from 'react-toastify';
 import ProductCard from '../Components/ProductCard';
 import { getPrice } from '../utils/commonFunc';
+import Link from 'next/link';
+import { routes } from '../utils/routes';
 
 export default function Page({params}) {
 
@@ -39,10 +41,12 @@ export default function Page({params}) {
     <Layout>
         <div className='pl-20 pt-14'>
           <div className="grid grid-cols-5 gap-6">
-            <div className="w-[215px] h-[350px] flex flex-col items-center justify-center border-2 border-dashed border-gray-400 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-800 transition">
-              <FaPlus className="w-10 h-10 text-gray-200" />
-              <p className="text-gray-200 font-medium mt-2">Add New Product</p>
-            </div>
+            <Link href={routes.PRODUCTFORMPAGE}>
+              <div className="w-[215px] h-[350px] flex flex-col items-center justify-center border-2 border-dashed border-gray-400 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-800 transition">
+                <FaPlus className="w-10 h-10 text-gray-200" />
+                <p className="text-gray-200 font-medium mt-2">Add New Product</p>
+              </div>
+            </Link>
             {products?.map((item, i) => (
               <Fragment key={item._id}>
                   <ProductCard
