@@ -29,13 +29,13 @@ export default function Sidebar() {
       <h2 className="text-xl font-bold text-center my-6">ShopEase</h2>
 
       <div className="space-y-4">
-        <Link href="#" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
+        <Link href={routes.CATEGORY} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
           <span>Categories</span>
         </Link>
-        <Link href="#" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
+        <Link href={routes.PRODUCT} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
           <span>Products</span>
         </Link>
-        <Link href="#" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
+        <Link href={routes.ORDERS} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
           <span>Orders</span>
         </Link>
       </div>

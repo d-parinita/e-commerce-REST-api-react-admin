@@ -51,3 +51,21 @@ export const signOut = async() => {
         throw error
     }
 } 
+
+export const getCategories = async() => {
+    try {
+        const data = await ecommerceApi.get(apiConstants.GETCATEGORY)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const getProducts = async(params) => {
+    try {
+        const data = await ecommerceApi.get(apiConstants.GETPRODUCT + `?` + params)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
