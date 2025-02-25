@@ -109,3 +109,12 @@ export const deleteCategory = async(id) => {
         throw error
     }
 }
+
+export const getAllOrders = async(params) => {
+    try {
+        const data = await ecommerceApi.get(apiConstants.GETALLORDERS + `?` + params)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
