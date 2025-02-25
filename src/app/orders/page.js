@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../Components/Layout'
 import OrderTable from '../Components/OrderTable'
-import { getAllOrders } from '../apiService'
+import { getAllOrders, updateOrders } from '../apiService'
 import { toast } from 'react-toastify'
 
 export default function Page() {
@@ -13,7 +13,6 @@ export default function Page() {
     // setLoading(true)
     try {
       const response = await getAllOrders()
-      console.log(response.data);
       setOrders(response?.data)
     } catch (error) {
       toast.error('Category not available')
@@ -21,6 +20,22 @@ export default function Page() {
       // setLoading(false)
     }
   }
+
+  const updateStatus = async(e, orderId, i) => {    
+    const payload = {status: e.target.value}
+    // setLoading(true)
+    try {
+      const response = await updateOrders(payload, orderId)
+      const updatedOrder = [...orders]
+      updatedOrder[i].status = e.target.value
+      setOrders(updatedOrder)
+    } catch (error) {
+      toast.error('Category not available')
+    } finally {
+      // setLoading(false)
+    }
+  }
+
   useEffect(() => {
     getOrders()
   }, [])
@@ -30,6 +45,7 @@ export default function Page() {
         <Layout>
           <OrderTable
             orders={orders}
+            updateStatus={(e, orderId, i) => updateStatus(e, orderId, i)}
           />
         </Layout>
     </>

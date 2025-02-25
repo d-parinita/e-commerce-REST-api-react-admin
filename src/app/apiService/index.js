@@ -118,3 +118,13 @@ export const getAllOrders = async(params) => {
         throw error
     }
 }
+
+export const updateOrders = async(payload, id) => {
+    try {
+        const data = await ecommerceApi.post(apiConstants.UPDATEORDER + id, payload)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+

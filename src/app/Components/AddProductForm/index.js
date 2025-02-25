@@ -1,5 +1,5 @@
 'use client'
-import { getCategories } from '@/app/apiService'
+import { getCategories, getPresignUrl } from '@/app/apiService'
 import { routes } from '@/app/utils/routes'
 import { useRouter } from 'next/navigation'
 import React, { Fragment, useEffect, useState } from 'react'
@@ -20,6 +20,13 @@ export default function AddProductForm() {
     category: '',
     sizes: [] 
   })
+  const [selectedSizes, setSelectedSizes] = useState([])
+  const [img, setImg] = useState([])
+  const [presignData, setPresignData] = useState({
+      bucketName: 'ecom-store-products',
+      fileName: ''
+    })
+    const [file, setFile] = useState(null)
   const [categories, setCategories] = useState([])
   
   const getCategoriesData = async () => {
@@ -34,9 +41,41 @@ export default function AddProductForm() {
     }
   }
 
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files)
+    setImg((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, ...files]
+    }))
+  }
+
+  // const addProduct = () => {
+  //   for (let i = 0; i < img.length; i++) {
+  //     getPresignUrl(presignData).then((response) => {
+          
+  //     })
+  //   }
+  // }
+
+  const handleSizeChange = (i, field, value) => {
+    const updatedSizes = [...selectedSizes]
+    updatedSizes[i][field] = value
+    setSelectedSizes(updatedSizes)
+    setData({ ...data, sizes: updatedSizes })
+  }
+
+  const addSize = () => {
+    setSelectedSizes([...selectedSizes, { name: '', price: '' }])
+  }
+
   useEffect(() => {
     getCategoriesData()
   }, [])
+
+  useEffect(() => {
+    console.log(data);
+    
+  }, [data])
 
   return (
     <>
@@ -74,7 +113,9 @@ export default function AddProductForm() {
         <div>
           <label className="block text-gray-300 mb-2">Upload Images:</label>
           <input 
-            type="file" 
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload} 
             multiple
             className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:text-sm file:bg-gray-800 file:text-white hover:file:bg-gray-900"
           />
@@ -96,6 +137,7 @@ export default function AddProductForm() {
               onChange={(e) => setData({...data, featured: e.target.value})}
               className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
             >
+              <option value={true}>Select feature...</option>
               <option value={true}>Yes</option>
               <option value={false}>No</option>
             </select>
@@ -107,6 +149,7 @@ export default function AddProductForm() {
             onChange={(e) => setData({...data, category: e.target.value})}
             className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
           >
+            <option value='select'>Select category...</option>
             {categories?.map((category) => (
               <Fragment key={category._id}>
                 <option value={category._id}>{category.name}</option>
@@ -115,24 +158,27 @@ export default function AddProductForm() {
           </select>
         </div>
         <div>
-          <label className="block text-gray-300 mb-2">Price:</label>
-          <input 
-            type="number" 
-            min="1"
-            placeholder="Enter price..." 
-            className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-300 mb-2">Select Size:</label>
-          <select className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none">
-            <option>XS</option>
-            <option>S</option>
-            <option>M</option>
-            <option>L</option>
-            <option>XL</option>
-            <option>XXL</option>
-          </select>
+          <label className="block text-gray-300 mb-2">Sizes & Prices:</label>
+          {selectedSizes.map((size, i) => (
+            <div key={i} className="flex space-x-2 mb-2">
+              <input 
+                type="text" 
+                placeholder="Enter Size" 
+                value={size.name} 
+                onChange={(e) => handleSizeChange(i, 'name', e.target.value)} 
+                className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none" 
+              />
+              <input 
+                type="number" 
+                placeholder="Enter Price" 
+                value={size.price} 
+                min="1" 
+                onChange={(e) => handleSizeChange(i, 'price', e.target.value)} 
+                className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none" 
+              />
+            </div>
+          ))}
+          <button type="button" onClick={addSize} className="bg-lime-500 text-white py-1 px-4 rounded-md">+ Add Size</button>
         </div>
         <button className="w-full bg-lime-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-lime-600 transition">
           Add Product

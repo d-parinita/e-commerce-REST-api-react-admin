@@ -1,7 +1,8 @@
+'use client'
 import { ORDER_STATUS } from '@/app/utils/constVariable'
-import React from 'react'
+import React, { useState } from 'react'
 
-export default function OrderTable({ orders }) {
+export default function OrderTable({ orders, updateStatus }) {
 
     const getOrderStatusColor = (orderStatus) => {
         let color = ''
@@ -33,7 +34,7 @@ export default function OrderTable({ orders }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {orders?.map((order) => (
+                        {orders?.map((order, i) => (
                             <tr key={order._id} className="border-b border-gray-700 hover:bg-gray-800">
                                 <td className="py-3 px-4 text-center">{order.products.length}</td>
                                 <td className="py-4 px-4">
@@ -69,6 +70,13 @@ export default function OrderTable({ orders }) {
                                 </td>
                                 <td className="py-3 px-4 text-center">{order.paymentMode}</td>
                                 <td className="py-3 px-4 text-center">
+                                    <select onChange={(e) => updateStatus(e, order._id, i)} className="bg-gray-800 text-white text-sm mr-4 px-3 py-1 rounded-md border border-gray-600">
+                                        <option value="Received">Received</option>
+                                        <option value="Processing">Processing</option>
+                                        <option value="Shipped">Shipped</option>
+                                        <option value="Delivered">Delivered</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    </select>{status}
                                     <span className={`${getOrderStatusColor(order.status)} text-white px-2 py-1 rounded-md text-xs`}>{order.status}</span>
                                 </td>
                             </tr>
