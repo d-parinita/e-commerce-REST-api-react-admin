@@ -1,5 +1,5 @@
 'use client'
-import { getCategories, getPresignUrl } from '@/app/apiService'
+import { addProducts, getCategories, getPresignUrl, uploadImg } from '@/app/apiService'
 import { routes } from '@/app/utils/routes'
 import { useRouter } from 'next/navigation'
 import React, { Fragment, useEffect, useState } from 'react'
@@ -22,11 +22,6 @@ export default function AddProductForm() {
   })
   const [selectedSizes, setSelectedSizes] = useState([])
   const [img, setImg] = useState([])
-  const [presignData, setPresignData] = useState({
-      bucketName: 'ecom-store-products',
-      fileName: ''
-    })
-    const [file, setFile] = useState(null)
   const [categories, setCategories] = useState([])
   
   const getCategoriesData = async () => {
@@ -45,17 +40,38 @@ export default function AddProductForm() {
     const files = Array.from(e.target.files)
     setImg((prevData) => ({
       ...prevData,
-      images: [...prevData.images, ...files]
+      images: Array.isArray(prevData?.images) ? [...prevData.images, ...files] : [...files]
     }))
   }
 
-  // const addProduct = () => {
-  //   for (let i = 0; i < img.length; i++) {
-  //     getPresignUrl(presignData).then((response) => {
-          
-  //     })
-  //   }
-  // }
+  const addProduct = (e) => {
+    e.preventDefault()
+    const urls = []
+    for (let i = 0; i < img?.images?.length; i++) {
+      const payload = {
+        bucketName: 'ecom-store-products',
+        fileName: img?.images[i]?.name
+      }
+      getPresignUrl(payload).then((response) => {
+        const formattedUrl = response?.data?.url.split('?')[0]
+        urls.push(formattedUrl)
+        uploadImg(img?.images[i], formattedUrl, img?.images[i]?.type).then((res) => {
+          const productPayload = {...data, images: urls}
+          if (i == img?.images?.length - 1) {
+            addProducts(productPayload).then((result) => {
+              router.push(routes.PRODUCT)
+            }).catch((error) => {
+                toast.error('Some error in adding data!')
+            })
+          }
+        }).catch((error) => {
+            toast.error('Some error in adding data!')
+        })
+      }).catch((error) => {
+          toast.error('Some error in adding data!')
+      })
+    }
+  }
 
   const handleSizeChange = (i, field, value) => {
     const updatedSizes = [...selectedSizes]
@@ -72,17 +88,12 @@ export default function AddProductForm() {
     getCategoriesData()
   }, [])
 
-  useEffect(() => {
-    console.log(data);
-    
-  }, [data])
-
   return (
     <>
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-gray-900 text-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Add New Product</h2>
 
-      <form className="space-y-4">
+      <form onSubmit={(e) => addProduct(e)} className="space-y-4">
         <div>
           <label className="block text-gray-300 mb-2">Title:</label>
           <input 

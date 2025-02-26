@@ -128,3 +128,20 @@ export const updateOrders = async(payload, id) => {
     }
 }
 
+export const addProducts = async(payload) => {
+    try {
+        const data = await ecommerceApi.post(apiConstants.ADDPRODUCTS, payload)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const deleteProduct = async(id) => {
+    try {
+        const data = await ecommerceApi.delete(apiConstants.DELETEPRODUCT + id)
+        return data
+    } catch (error) {
+        throw error
+    }
+}

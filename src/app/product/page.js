@@ -1,17 +1,16 @@
 'use client'
-import React, { Fragment, use, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { FaPlus } from "react-icons/fa6";
 import Layout from '../Components/Layout';
-import { getProducts } from '../apiService';
+import { deleteProduct, getProducts } from '../apiService';
 import { toast } from 'react-toastify';
 import ProductCard from '../Components/ProductCard';
 import { getPrice } from '../utils/commonFunc';
 import Link from 'next/link';
 import { routes } from '../utils/routes';
 
-export default function Page({params}) {
+export default function Page() {
 
-  const { id } = use(params) 
   // const { setLoading } = useLoader()
 
   const [products, setProducts] = useState([])
@@ -32,6 +31,21 @@ export default function Page({params}) {
       }
   }
 
+  const deleteProducts = async(id) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this product?");
+    if (!isConfirmed) return
+    // setLoading(true)
+    try {
+      const response = await deleteProduct(id)
+      const newProduct = products.filter((product) => product._id != id)
+      setProducts(newProduct)
+    } catch (error) {
+      toast.error('Product not deleted')
+    } finally {
+      // setLoading(false)
+    }
+  }
+
   useEffect(() => {
     getProduct()
   }, [currentPageNo])
@@ -39,21 +53,22 @@ export default function Page({params}) {
   return (
     <>
     <Layout>
-        <div className='pl-20 pt-14'>
-          <div className="grid grid-cols-5 gap-6">
+        <div className='px-20 pt-14'>
+          <div className="grid grid-cols-4 gap-6">
             <Link href={routes.PRODUCTFORMPAGE}>
               <div className="w-[215px] h-[350px] flex flex-col items-center justify-center border-2 border-dashed border-gray-400 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-800 transition">
                 <FaPlus className="w-10 h-10 text-gray-200" />
                 <p className="text-gray-200 font-medium mt-2">Add New Product</p>
               </div>
             </Link>
-            {products?.map((item, i) => (
+            {products?.map((item) => (
               <Fragment key={item._id}>
                   <ProductCard
                     img={item.images[0]}
                     title={item.title}
                     price={getPrice(item.sizes)}
                     summary={item.summary}
+                    onClick={() => deleteProducts(item._id)}
                   />
               </Fragment>
             ))}

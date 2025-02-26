@@ -48,8 +48,8 @@ export default function Page() {
   return (
     <>
     <Layout>
-        <div className='pl-20 pt-14'> 
-          <div className="grid grid-cols-7 gap-6">
+        <div className='px-20 pt-14'> 
+          <div className="grid grid-cols-6 gap-6">
             <Link href={routes.CATEGORYFORMPAGE}>
               <div className="w-32 h-32 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-800 transition">
                 <FaPlus className="w-8 h-8 text-gray-200" />
