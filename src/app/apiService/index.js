@@ -145,3 +145,21 @@ export const deleteProduct = async(id) => {
         throw error
     }
 }
+
+export const updateCategories = async(id, payload) => {
+    try {
+        const data = await ecommerceApi.post(apiConstants.UPDATECATEGORIES + id, payload)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const updateProducts = async(id, payload) => {
+    try {
+        const data = await ecommerceApi.post(apiConstants.UPDATEPRODUCTS + id, payload)
+        return data
+    } catch (error) {
+        throw error
+    }
+}

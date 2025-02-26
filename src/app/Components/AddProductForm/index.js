@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import React, { Fragment, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-export default function AddProductForm() {
+export default function AddProductForm({product, isEdit}) {
 
   const router = useRouter()
   // const { setLoading } = useLoader()

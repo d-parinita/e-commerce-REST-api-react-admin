@@ -8,9 +8,11 @@ import ProductCard from '../Components/ProductCard';
 import { getPrice } from '../utils/commonFunc';
 import Link from 'next/link';
 import { routes } from '../utils/routes';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
 
+  const router = useRouter()
   // const { setLoading } = useLoader()
 
   const [products, setProducts] = useState([])
@@ -29,6 +31,10 @@ export default function Page() {
       } finally {
         // setLoading(false)
       }
+  }
+
+  const editProduct = (id) => {
+    router.push(routes.UPDATEPRODUCT + id)
   }
 
   const deleteProducts = async(id) => {
@@ -69,6 +75,7 @@ export default function Page() {
                     price={getPrice(item.sizes)}
                     summary={item.summary}
                     onClick={() => deleteProducts(item._id)}
+                    onEdit={() => editProduct(item._id)}
                   />
               </Fragment>
             ))}

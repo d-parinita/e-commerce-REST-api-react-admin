@@ -7,9 +7,11 @@ import { toast } from 'react-toastify';
 import CategoryCard from '../Components/CategoryCard';
 import Link from 'next/link';
 import { routes } from '../utils/routes';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   
+  const router = useRouter()
   // const { setLoading } = useLoader()
 
   const [categories, setCategories] = useState([])
@@ -24,6 +26,10 @@ export default function Page() {
     } finally {
       // setLoading(false)
     }
+  }
+
+  const editCategory = (id) => {
+    router.push(routes.UPDATECATEGORY + id)
   }
 
   const deleteCategories = async(id) => {
@@ -62,6 +68,7 @@ export default function Page() {
                       imgUrl={category.imageUrl}
                       title={category.name}
                       onClick={() => deleteCategories(category._id)}
+                      onEdit={() => editCategory(category._id)}
                     />
                 </Fragment>
               ))}

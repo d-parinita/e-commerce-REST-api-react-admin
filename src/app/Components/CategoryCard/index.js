@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaEdit, FaTrash } from "react-icons/fa"
 
-export default function CategoryCard({ title, imgUrl, onClick }) {
+export default function CategoryCard({ title, imgUrl, onClick, onEdit }) {
   return (
     <>
       <div className="flex flex-col items-center space-y-4">
@@ -18,6 +18,7 @@ export default function CategoryCard({ title, imgUrl, onClick }) {
         <div className='flex space-x-2'>
           <button
             className="bg-blue-500 text-white p-1.5 rounded-full shadow-md hover:bg-blue-600 transition"
+            onClick={onEdit}
           >
             <FaEdit size={14} />
           </button>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaEdit, FaTrash } from "react-icons/fa"
 
-export default function ProductCard({ title, summary, price, img, onClick }) {
+export default function ProductCard({ title, summary, price, img, onClick, onEdit }) {
   return (
     <>
     <div className="bg-gray-800 shadow-lg w-[215px] h-[350px] hover:shadow-2xl">
@@ -18,6 +18,7 @@ export default function ProductCard({ title, summary, price, img, onClick }) {
           <div className='flex space-x-2'>
             <button
               className="bg-blue-500 text-white p-1.5 rounded-full shadow-md hover:bg-blue-600 transition"
+              onClick={onEdit}
             >
               <FaEdit size={14} />
             </button>
