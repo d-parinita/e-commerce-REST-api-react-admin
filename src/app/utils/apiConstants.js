@@ -6,6 +6,7 @@ export const apiConstants = {
     UPDATECATEGORIES: 'categories/update-category/',
     DELETECATEGORIES: 'categories/',
     GETPRODUCT: 'products/get-products',
+    GETPRODUCTBYID: 'products/get-product/',
     ADDPRODUCTS: 'products/add-product',
     UPDATEPRODUCTS: 'products/update-product/',
     DELETEPRODUCT: 'products/delete-product/',
@@ -14,5 +15,3 @@ export const apiConstants = {
     PRESIGNURL: 'common/get-signed-url'
 }
 
-//ecom-store-categories
-//ecom-store-products

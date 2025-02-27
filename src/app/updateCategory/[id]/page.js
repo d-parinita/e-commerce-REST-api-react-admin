@@ -13,7 +13,6 @@ export default function Page({params}) {
         // setLoading(true)
         try {
             const response = await getCategories()
-            console.log(response.data.data);
             const category = response?.data?.data.find((item) => item._id == id)
             setCategories(category)
         } catch (error) {

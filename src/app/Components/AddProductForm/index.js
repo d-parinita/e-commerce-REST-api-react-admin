@@ -1,5 +1,5 @@
 'use client'
-import { addProducts, getCategories, getPresignUrl, uploadImg } from '@/app/apiService'
+import { addProducts, getCategories, getPresignUrl, updateProducts, uploadImg } from '@/app/apiService'
 import { routes } from '@/app/utils/routes'
 import { useRouter } from 'next/navigation'
 import React, { Fragment, useEffect, useState } from 'react'
@@ -73,6 +73,35 @@ export default function AddProductForm({product, isEdit}) {
     }
   }
 
+  const updateProduct = (e) => {
+    e.preventDefault()
+    const urls = []
+    for (let i = 0; i < img?.images?.length; i++) {
+      const payload = {
+        bucketName: 'ecom-store-products',
+        fileName: img?.images[i]?.name
+      }
+      getPresignUrl(payload).then((response) => {
+        const formattedUrl = response?.data?.url.split('?')[0]
+        urls.push(formattedUrl)
+        uploadImg(img?.images[i], formattedUrl, img?.images[i]?.type).then((res) => {
+          const productPayload = {...data, images: urls}
+          if (i == img?.images?.length - 1) {
+            updateProducts(product._id, productPayload).then((result) => {
+              router.push(routes.PRODUCT)
+            }).catch((error) => {
+                toast.error('Some error in adding data!')
+            })
+          }
+        }).catch((error) => {
+            toast.error('Some error in adding data!')
+        })
+      }).catch((error) => {
+          toast.error('Some error in adding data!')
+      })
+    }
+  }
+
   const handleSizeChange = (i, field, value) => {
     const updatedSizes = [...selectedSizes]
     updatedSizes[i][field] = value
@@ -88,17 +117,29 @@ export default function AddProductForm({product, isEdit}) {
     getCategoriesData()
   }, [])
 
+  useEffect(() => {
+    setData({
+      title: product?.title,
+      summary: product?.summary,
+      desc: product?.desc,
+      quantity: product?.quantity,
+      featured: product?.featured,
+      category: product?.category,
+    })
+  }, [product])
+
   return (
     <>
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-gray-900 text-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Add New Product</h2>
 
-      <form onSubmit={(e) => addProduct(e)} className="space-y-4">
+      <form onSubmit={(e) => isEdit ? updateProduct(e) : addProduct(e)} className="space-y-4">
         <div>
           <label className="block text-gray-300 mb-2">Title:</label>
           <input 
             type="text" 
             onChange={(e) => setData({...data, title: e.target.value})}
+            value={data.title}
             placeholder="Enter product title..." 
             className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
           />
@@ -108,6 +149,7 @@ export default function AddProductForm({product, isEdit}) {
           <input 
             type="text" 
             onChange={(e) => setData({...data, summary: e.target.value})}
+            value={data.summary}
             placeholder="Short summary of the product..." 
             className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
           />
@@ -117,6 +159,7 @@ export default function AddProductForm({product, isEdit}) {
           <textarea 
             placeholder="Enter full product description..." 
             onChange={(e) => setData({...data, desc: e.target.value})}
+            value={data.desc}
             rows="4"
             className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
           ></textarea>
@@ -137,6 +180,7 @@ export default function AddProductForm({product, isEdit}) {
             <input 
               type="number" 
               onChange={(e) => setData({...data, quantity: e.target.value})}
+              value={data.quantity}
               min="1"
               placeholder="Enter quantity..." 
               className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
@@ -146,6 +190,7 @@ export default function AddProductForm({product, isEdit}) {
             <label className="block text-gray-300 mb-2">Featured Product:</label>
             <select 
               onChange={(e) => setData({...data, featured: e.target.value})}
+              value={data.featured}
               className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
             >
               <option value={true}>Select feature...</option>
@@ -158,6 +203,7 @@ export default function AddProductForm({product, isEdit}) {
           <label className="block text-gray-300 mb-2">Select Category:</label>
           <select 
             onChange={(e) => setData({...data, category: e.target.value})}
+            value={data.category}
             className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
           >
             <option value='select'>Select category...</option>
@@ -192,7 +238,7 @@ export default function AddProductForm({product, isEdit}) {
           <button type="button" onClick={addSize} className="bg-lime-500 text-white py-1 px-4 rounded-md">+ Add Size</button>
         </div>
         <button className="w-full bg-lime-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-lime-600 transition">
-          Add Product
+          {isEdit ? 'Edit' : 'Add'} Product
         </button>
       </form>
     </div>  

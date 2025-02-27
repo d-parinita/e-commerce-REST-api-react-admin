@@ -70,6 +70,15 @@ export const getProducts = async(params) => {
     }
 }
 
+export const getProductById = async(id) => {
+    try {
+        const data = await ecommerceApi.get(apiConstants.GETPRODUCTBYID + id)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
 export const getPresignUrl = async(payload) => {
     try {
         const data = await ecommerceApi.post(apiConstants.PRESIGNURL, payload)
