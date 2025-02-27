@@ -129,7 +129,9 @@ export default function AddProductForm({product, isEdit}) {
   }, [])
 
   useEffect(() => {
-    setSelectedSizes(product?.sizes)
+    if (product?.sizes) {
+      setSelectedSizes(product?.sizes)
+    }
     setData({
       title: product?.title,
       summary: product?.summary,
