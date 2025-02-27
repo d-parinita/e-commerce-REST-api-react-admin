@@ -1,5 +1,6 @@
 'use client'
 import { addProducts, getCategories, getPresignUrl, updateProducts, uploadImg } from '@/app/apiService'
+import { useLoader } from '@/app/context/LoaderContext'
 import { routes } from '@/app/utils/routes'
 import { useRouter } from 'next/navigation'
 import React, { Fragment, useEffect, useState } from 'react'
@@ -8,7 +9,7 @@ import { toast } from 'react-toastify'
 export default function AddProductForm({product, isEdit}) {
 
   const router = useRouter()
-  // const { setLoading } = useLoader()
+  const { setLoading } = useLoader()
 
   const [data, setData] = useState({
     title: '',
@@ -25,14 +26,14 @@ export default function AddProductForm({product, isEdit}) {
   const [categories, setCategories] = useState([])
   
   const getCategoriesData = async () => {
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await getCategories()
       setCategories(response?.data?.data)
     } catch (error) {
       toast.error('Category not available')
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -46,6 +47,7 @@ export default function AddProductForm({product, isEdit}) {
 
   const addProduct = (e) => {
     e.preventDefault()
+    setLoading(true)
     const urls = []
     for (let i = 0; i < img?.images?.length; i++) {
       const payload = {
@@ -59,22 +61,27 @@ export default function AddProductForm({product, isEdit}) {
           const productPayload = {...data, images: urls}
           if (i == img?.images?.length - 1) {
             addProducts(productPayload).then((result) => {
+              setLoading(false)
               router.push(routes.PRODUCT)
             }).catch((error) => {
                 toast.error('Some error in adding data!')
+                setLoading(false)
             })
           }
         }).catch((error) => {
             toast.error('Some error in adding data!')
+            setLoading(false)
         })
       }).catch((error) => {
           toast.error('Some error in adding data!')
+          setLoading(false)
       })
     }
   }
 
   const updateProduct = (e) => {
     e.preventDefault()
+    setLoading(true)
     const urls = []
     for (let i = 0; i < img?.images?.length; i++) {
       const payload = {
@@ -88,16 +95,20 @@ export default function AddProductForm({product, isEdit}) {
           const productPayload = {...data, images: urls}
           if (i == img?.images?.length - 1) {
             updateProducts(product._id, productPayload).then((result) => {
+              setLoading(false)
               router.push(routes.PRODUCT)
             }).catch((error) => {
                 toast.error('Some error in adding data!')
+                setLoading(false)
             })
           }
         }).catch((error) => {
             toast.error('Some error in adding data!')
+            setLoading(false)
         })
       }).catch((error) => {
           toast.error('Some error in adding data!')
+          setLoading(false)
       })
     }
   }
@@ -118,16 +129,17 @@ export default function AddProductForm({product, isEdit}) {
   }, [])
 
   useEffect(() => {
+    setSelectedSizes(product?.sizes)
     setData({
       title: product?.title,
       summary: product?.summary,
       desc: product?.desc,
-      images: [product?.images],
+      images: product?.images,
       quantity: product?.quantity,
       featured: product?.featured,
       category: product?.category,
-      // sizes: [product?.sizes]
-    })
+      sizes: product?.sizes
+    })    
   }, [product])
 
   return (
@@ -176,11 +188,13 @@ export default function AddProductForm({product, isEdit}) {
             className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:text-sm file:bg-gray-800 file:text-white hover:file:bg-gray-900"
           />
           {isEdit ? (<>
-            {data.images.map((item, i) => (
+          <div className='flex gap-2'>
+            {data?.images?.map((item, i) => (
               <div key={i} className="w-16 h-16 my-4 overflow-hidden rounded-lg">
                 <img src={item} alt="Description" className="w-full h-full object-cover"/>
               </div>
             ))}
+          </div>
           </>) : ''} 
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -225,7 +239,7 @@ export default function AddProductForm({product, isEdit}) {
         </div>
         <div>
           <label className="block text-gray-300 mb-2">Sizes & Prices:</label>
-          {selectedSizes.map((size, i) => (
+          {selectedSizes?.map((size, i) => (
             <div key={i} className="flex space-x-2 mb-2">
               <input 
                 type="text" 

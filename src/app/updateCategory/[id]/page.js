@@ -2,15 +2,18 @@
 import { getCategories } from '@/app/apiService'
 import AddCategoryForm from '@/app/Components/AddCategoryForm'
 import Layout from '@/app/Components/Layout'
+import { useLoader } from '@/app/context/LoaderContext'
 import React, { use, useEffect, useState } from 'react'
 
 export default function Page({params}) {
 
     const {id} = use(params)
+    const { setLoading } = useLoader()
+    
     const [categories, setCategories] = useState([])
 
     const getCategoriesData = async () => {
-        // setLoading(true)
+        setLoading(true)
         try {
             const response = await getCategories()            
             const category = response?.data?.data.find((item) => item._id == id)
@@ -18,7 +21,7 @@ export default function Page({params}) {
         } catch (error) {
             toast.error('Category not available')
         } finally {
-            // setLoading(false)
+            setLoading(false)
         }
     }  
 

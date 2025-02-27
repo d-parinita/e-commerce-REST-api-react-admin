@@ -4,11 +4,12 @@ import React, { useState } from 'react'
 import { signIn } from '../apiService'
 import { routes } from '../utils/routes'
 import { toast } from 'react-toastify'
+import { useLoader } from '../context/LoaderContext'
 
 export default function Page() {
 
   const router = useRouter()
-  // const { setLoading } = useLoader()
+  const { setLoading } = useLoader()
 
   const [userData, setUserData] = useState({
     email: '',
@@ -16,7 +17,7 @@ export default function Page() {
   })
 
   const handleSignIn = async(e) => {
-    // setLoading(true)
+    setLoading(true)
     e.preventDefault()
     try {
       const response = await signIn(userData)
@@ -24,14 +25,14 @@ export default function Page() {
         toast.success('Signed in successfully')
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('user', JSON.stringify(response.data.data))
-        router.push(routes.HOME)
+        router.push(routes.CATEGORY)
       } else {
         toast.error('You are not authorised to signed in!')
       }
     } catch (error) {
       toast.error(error.response?.data?.error)
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   }
 

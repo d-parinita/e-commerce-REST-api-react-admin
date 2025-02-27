@@ -1,5 +1,6 @@
 'use client'
 import { signOut } from "@/app/apiService";
+import { useLoader } from "@/app/context/LoaderContext";
 import { routes } from "@/app/utils/routes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,9 +10,10 @@ import { toast } from "react-toastify";
 export default function Sidebar() {
 
   const router = useRouter()
+  const { setLoading } = useLoader()
 
   const handleSignOut = async() => {
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await signOut()
       toast.success('Sign out successfully')
@@ -20,8 +22,12 @@ export default function Sidebar() {
     } catch (error) {
       toast.error(error.response?.data?.error)
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
+  }
+
+  const getCurrentPath = () => {
+    return window.location.pathname
   }
 
   return (
@@ -29,13 +35,13 @@ export default function Sidebar() {
       <h2 className="text-xl font-bold text-center my-6">ShopEase</h2>
 
       <div className="space-y-4">
-        <Link href={routes.CATEGORY} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
+        <Link href={routes.CATEGORY} className={`${getCurrentPath() == routes.CATEGORY ? 'bg-gray-700' : ''} flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition`}>
           <span>Categories</span>
         </Link>
-        <Link href={routes.PRODUCT} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
+        <Link href={routes.PRODUCT} className={`${getCurrentPath() == routes.PRODUCT ? 'bg-gray-700' : ''} flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition`}>
           <span>Products</span>
         </Link>
-        <Link href={routes.ORDERS} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition">
+        <Link href={routes.ORDERS} className={`${getCurrentPath() == routes.ORDERS ? 'bg-gray-700' : ''} flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition`}>
           <span>Orders</span>
         </Link>
       </div>

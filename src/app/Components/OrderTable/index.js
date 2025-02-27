@@ -1,6 +1,6 @@
 'use client'
 import { ORDER_STATUS } from '@/app/utils/constVariable'
-import React, { useState } from 'react'
+import React from 'react'
 
 export default function OrderTable({ orders, updateStatus }) {
 

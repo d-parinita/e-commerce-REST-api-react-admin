@@ -1,5 +1,6 @@
 'use client'
 import { addCategory, getPresignUrl, updateCategories, uploadImg } from '@/app/apiService'
+import { useLoader } from '@/app/context/LoaderContext'
 import { routes } from '@/app/utils/routes'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -8,7 +9,7 @@ import { toast } from 'react-toastify'
 export default function AddCategoryForm({category, isEdit}) {
 
   const router = useRouter()
-  // const { setLoading } = useLoader()
+  const { setLoading } = useLoader()
 
   const [name, setName] = useState('')
   const [url, setUrl] = useState(null)
@@ -26,6 +27,7 @@ export default function AddCategoryForm({category, isEdit}) {
 
   const addData = (e) => {
     e.preventDefault()
+    setLoading(true)
     getPresignUrl(presignData).then((response) => {
       const formattedUrl = response?.data?.url.split('?')[0]
       uploadImg(file, response?.data?.url, file.type).then((res) => {
@@ -34,20 +36,25 @@ export default function AddCategoryForm({category, isEdit}) {
           imageUrl: formattedUrl
         }
         addCategory(payload).then((result) => {
+          setLoading(false)
           router.push(routes.CATEGORY)
         }).catch((error) => {
           toast.error('Some error in adding data!')
+          setLoading(false)
         })
       }).catch((error) => {
         toast.error('Some error in adding data!')
+        setLoading(false)
       })
     }).catch((error) => {
       toast.error('Some error in adding data!')
+      setLoading(false)
     })
   }
 
   const updateData = (e) => {
     e.preventDefault()
+    setLoading(true)
     getPresignUrl(presignData).then((response) => {
       const formattedUrl = response?.data?.url.split('?')[0]
       uploadImg(file, response?.data?.url, file.type).then((res) => {
@@ -56,15 +63,19 @@ export default function AddCategoryForm({category, isEdit}) {
           imageUrl: formattedUrl
         }
         updateCategories(category._id, payload).then((result) => {
+          setLoading(false)
           router.push(routes.CATEGORY)
         }).catch((error) => {
           toast.error('Some error in adding data!')
+          setLoading(false)
         })
       }).catch((error) => {
         toast.error('Some error in adding data!')
+        setLoading(false)
       })
     }).catch((error) => {
       toast.error('Some error in adding data!')
+      setLoading(false)
     })
   }
 

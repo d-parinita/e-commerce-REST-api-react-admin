@@ -4,26 +4,29 @@ import Layout from '../Components/Layout'
 import OrderTable from '../Components/OrderTable'
 import { getAllOrders, updateOrders } from '../apiService'
 import { toast } from 'react-toastify'
+import { useLoader } from '../context/LoaderContext'
 
 export default function Page() {
 
+  const { setLoading } = useLoader()
+  
   const [orders, setOrders] = useState([])
 
   const getOrders = async () => {
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await getAllOrders()
       setOrders(response?.data)
     } catch (error) {
       toast.error('Category not available')
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   }
 
   const updateStatus = async(e, orderId, i) => {    
     const payload = {status: e.target.value}
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await updateOrders(payload, orderId)
       const updatedOrder = [...orders]
@@ -32,7 +35,7 @@ export default function Page() {
     } catch (error) {
       toast.error('Category not available')
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   }
 

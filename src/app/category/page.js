@@ -8,23 +8,24 @@ import CategoryCard from '../Components/CategoryCard';
 import Link from 'next/link';
 import { routes } from '../utils/routes';
 import { useRouter } from 'next/navigation';
+import { useLoader } from '../context/LoaderContext';
 
 export default function Page() {
   
   const router = useRouter()
-  // const { setLoading } = useLoader()
+  const { setLoading } = useLoader()
 
   const [categories, setCategories] = useState([])
 
   const getCategoriesData = async() => {
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await getCategories()
       setCategories(response?.data?.data)
     } catch (error) {
       toast.error('Category not available')
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -35,7 +36,7 @@ export default function Page() {
   const deleteCategories = async(id) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this category?");
     if (!isConfirmed) return
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await deleteCategory(id)
       const newCategory = categories.filter((category) => category._id != id)
@@ -43,7 +44,7 @@ export default function Page() {
     } catch (error) {
       toast.error('Category not deleted')
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   }
 

@@ -9,18 +9,19 @@ import { getPrice } from '../utils/commonFunc';
 import Link from 'next/link';
 import { routes } from '../utils/routes';
 import { useRouter } from 'next/navigation';
+import { useLoader } from '../context/LoaderContext';
 
 export default function Page() {
 
   const router = useRouter()
-  // const { setLoading } = useLoader()
+  const { setLoading } = useLoader()
 
   const [products, setProducts] = useState([])
   const [hasNextPage, setHasNextPage] = useState(true)
   const [currentPageNo, setCurrentPageNo] = useState(1)
 
   const getProduct = async() => {
-    // setLoading(true)
+    setLoading(true)
     const preparePayload = `pageNumber=${currentPageNo}&limit=50`
       try {
           const response = await getProducts(preparePayload)
@@ -29,7 +30,7 @@ export default function Page() {
       } catch (error) {
           toast.error('Product not available')
       } finally {
-        // setLoading(false)
+        setLoading(false)
       }
   }
 
@@ -40,7 +41,7 @@ export default function Page() {
   const deleteProducts = async(id) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this product?");
     if (!isConfirmed) return
-    // setLoading(true)
+    setLoading(true)
     try {
       const response = await deleteProduct(id)
       const newProduct = products.filter((product) => product._id != id)
@@ -48,7 +49,7 @@ export default function Page() {
     } catch (error) {
       toast.error('Product not deleted')
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
   }
 
