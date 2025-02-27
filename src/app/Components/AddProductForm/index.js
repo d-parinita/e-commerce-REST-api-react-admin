@@ -122,9 +122,11 @@ export default function AddProductForm({product, isEdit}) {
       title: product?.title,
       summary: product?.summary,
       desc: product?.desc,
+      images: [product?.images],
       quantity: product?.quantity,
       featured: product?.featured,
       category: product?.category,
+      // sizes: [product?.sizes]
     })
   }, [product])
 
@@ -169,10 +171,17 @@ export default function AddProductForm({product, isEdit}) {
           <input 
             type="file"
             accept="image/*"
-            onChange={handleImageUpload} 
+            onChange={handleImageUpload}
             multiple
             className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:text-sm file:bg-gray-800 file:text-white hover:file:bg-gray-900"
           />
+          {isEdit ? (<>
+            {data.images.map((item, i) => (
+              <div key={i} className="w-16 h-16 my-4 overflow-hidden rounded-lg">
+                <img src={item} alt="Description" className="w-full h-full object-cover"/>
+              </div>
+            ))}
+          </>) : ''} 
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>

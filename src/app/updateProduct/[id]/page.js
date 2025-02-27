@@ -13,7 +13,7 @@ export default function Page({params}) {
     const getProduct = async () => {
       // setLoading(true)
       try {
-        const response = await getProductById(id)
+        const response = await getProductById(id)        
         setProducts(response?.data?.data)
       } catch (error) {
         toast.error('Product not available')

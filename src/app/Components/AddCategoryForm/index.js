@@ -11,6 +11,7 @@ export default function AddCategoryForm({category, isEdit}) {
   // const { setLoading } = useLoader()
 
   const [name, setName] = useState('')
+  const [url, setUrl] = useState(null)
   const [presignData, setPresignData] = useState({
     bucketName: 'ecom-store-categories',
     fileName: ''
@@ -69,6 +70,7 @@ export default function AddCategoryForm({category, isEdit}) {
 
   useEffect(() => {
     setName(category?.name)
+    setUrl(category?.imageUrl)
   }, [category])
 
   return (
@@ -95,6 +97,11 @@ export default function AddCategoryForm({category, isEdit}) {
             type="file" 
             className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:text-sm file:bg-gray-800 file:text-white hover:file:bg-gray-900"
           />
+          {isEdit ? (<>
+            <div className="w-16 h-16 my-4 overflow-hidden rounded-lg">
+              <img src={url} alt="Description" className="w-full h-full object-cover"/>
+            </div>
+          </>) : ''} 
         </div>        
         <button className="w-full bg-lime-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-lime-600 transition">
           {isEdit ? 'Edit' : 'Add'} Category

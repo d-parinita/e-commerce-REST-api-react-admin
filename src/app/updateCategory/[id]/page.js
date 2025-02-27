@@ -12,7 +12,7 @@ export default function Page({params}) {
     const getCategoriesData = async () => {
         // setLoading(true)
         try {
-            const response = await getCategories()
+            const response = await getCategories()            
             const category = response?.data?.data.find((item) => item._id == id)
             setCategories(category)
         } catch (error) {
