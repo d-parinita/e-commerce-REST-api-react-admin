@@ -27,7 +27,11 @@ export default function Sidebar() {
   }
 
   const getCurrentPath = () => {
-    return window.location.pathname
+    if (typeof window !== "undefined") {
+      return window.location.pathname
+    } else {
+      return false
+    }
   }
 
   return (
