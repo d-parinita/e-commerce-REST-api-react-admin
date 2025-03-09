@@ -14,7 +14,7 @@ export default function ProductCard({ title, summary, price, img, onClick, onEdi
       </div>
       <div className='px-4 pb-4'>
         <div className='flex justify-between'>
-          <h3 className="text-md font-bold text-white mb-1">{title}</h3>
+          <h3 className="text-md font-bold line-clamp-1 text-white mb-1">{title}</h3>
           <div className='flex space-x-2'>
             <button
               className="bg-blue-500 text-white p-1.5 rounded-full shadow-md hover:bg-blue-600 transition"
@@ -30,7 +30,7 @@ export default function ProductCard({ title, summary, price, img, onClick, onEdi
             </button>
           </div>
         </div>
-        <p className="text-sm text-gray-400 mb-2">
+        <p className="text-sm text-gray-400 line-clamp-1 mb-2">
             {summary}
         </p>
         <p className="text-md font-semibold text-lime-400">Rs. {price}</p>
