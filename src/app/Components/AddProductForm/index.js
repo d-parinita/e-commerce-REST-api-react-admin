@@ -218,7 +218,7 @@ export default function AddProductForm({product, isEdit}) {
               value={data.featured}
               className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-lime-500 focus:outline-none"
             >
-              <option value={true}>Select feature...</option>
+              <option>Select feature...</option>
               <option value={true}>Yes</option>
               <option value={false}>No</option>
             </select>
